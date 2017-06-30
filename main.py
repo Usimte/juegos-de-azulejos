@@ -28,7 +28,7 @@ def get_numero_aleatorio(numero_maximo):
 # return: Un tablero de tamano NxN lleno de valores aleatorios
 def crear_Tablero():
     global tablero
-    tamano = input("Elija el tamano del tablero: ")
+    tamano = int(input("Elija el tamano del tablero: "))
     set_tamano_tablero(tamano)
 
     fila_nueva = []
@@ -63,18 +63,18 @@ tamano_tablero = 0
 tablero = []
 
 # Se muestra el menu mientras el usuario no elija una opcion valida
-while (opcion_elegida_por_usuario > opcion_salir or opcion_elegida_por_usuario <= 0):
+while (opcion_elegida_por_usuario > OPCION_SALIR or opcion_elegida_por_usuario <= 0):
     print("Seleccione una opcion:")
     print("1. Jugar")
     print("2. Modo automatico")
     print("3. Salir")
-    opcion_elegida_por_usuario = input("Opcion: ")
+    opcion_elegida_por_usuario = int(input("Opcion: "))
 
-if (opcion_elegida_por_usuario == opcion_modo_individual):
+if (opcion_elegida_por_usuario == OPCION_MODO_INDIVIDUAL):
     crear_Tablero()
-elif (opcion_elegida_por_usuario == opcion_modo_automatico):
+elif (opcion_elegida_por_usuario == OPCION_MODO_AUTOMATICO):
     print("Método no disponible")
-elif (opcion_elegida_por_usuario == opcion_salir):
+elif (opcion_elegida_por_usuario == OPCION_SALIR):
     print("Gracias por jugar")
 else:
     print("La opción no es válida")
