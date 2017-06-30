@@ -4,6 +4,7 @@
 
 from random import randrange, random
 from os import system, name as opsystem
+from time import sleep
 
 #------------------------- Getters and setters ----------------------#
 
@@ -36,7 +37,7 @@ tablero = []
 # @numero_maximo es el limite opciones posibles de numeros aleatorios
 # return: un numero aleatorio entre 0 y (numero_maximo - 1)
 def get_numero_aleatorio(numero_maximo):
-    return randrange(0, stop=numero_maximo-1)
+    return randrange(0, stop=numero_maximo)
 
 
 # Esta funcion se encarga de pedirle al usuario el tamano del tablero y crear un tablero cuadrado con numeros aleatorios
@@ -48,37 +49,57 @@ def crear_Tablero(tam=tamano_tablero):
     fila_nueva = []
     for fila in range(0, tam):
         for columna in range(0, tam):
-            fila_nueva.append(columna)
+            fila_nueva.append(get_numero_aleatorio(tam))
         tablero.append(fila_nueva)
         fila_nueva = []
     print(tablero)
 
+# Esta función inicia un flujo de juego automático, el tablero se crea según un tamaño máximo posible indicado por el usuario
 def modo_Automatico():
-    tamano = get_numero_aleatorio(int(input("Ingrese el tamaño máximo posible: ")))
+    tamano = 0
+    seleccion_usuario = 0
+    while( seleccion_usuario <= 0 ):
+        encabezado(1)
+        seleccion_usuario =  int(input("Ingrese el tamaño máximo posible: "))
+        if(seleccion_usuario <= 0):
+            print('Intenta crear un tablero más grande')
+            sleep(1)
+    while (tamano == 0):
+        tamano = get_numero_aleatorio(seleccion_usuario + 1)
     crear_Tablero(tamano)
 
+# Esta función inicia un flujo manual de juego, el tablero es creado según las indicaciones del usuario
 def modo_Manual():
-    tamano = int(input("Elija el tamano del tablero: "))
+    tamano = 0
+    while( tamano <= 0 ):
+        encabezado(1)
+        tamano = int(input("Elija el tamano del tablero: "))
+        if(tamano <= 0):
+            print('Intenta crear un tablero más grande')
+            sleep(1)
     crear_Tablero(tamano)
 
-def encabezado():
+def encabezado(modo = 0):
+    if(opsystem == 'posix'):
+        system('clear')
+    else:
+        system('cls')
     print("     *   * ***** ***** **   ** ***** *****    ")
     print("     *   * *       *   * * * *   *   *        ")
     print("     *   * *****   *   *  *  *   *   *****    ")
     print("     *   *     *   *   *     *   *   *        ")
     print("     ***** ***** ***** *     *   *   *****    ")
     print("**********************************************")
-    print("*     Bienvenido al juego de azulejos        *")
+    if( modo == 0):
+        print("*     Bienvenido al juego de azulejos        *")
+    elif(modo == 1):
+        print("*           Que empiece el juego             *")
     print("**********************************************")
 
 
 
 # Se muestra el menu mientras el usuario no elija una opcion valida
 while (opcion_elegida_por_usuario > OPCION_SALIR or opcion_elegida_por_usuario <= 0):
-    if(opsystem == 'posix'):
-        system('clear')
-    else:
-        system('cls')
     encabezado()
     print("Seleccione una opcion:")
     print("1. Jugar")
@@ -93,3 +114,4 @@ while (opcion_elegida_por_usuario > OPCION_SALIR or opcion_elegida_por_usuario <
         print("Gracias por jugar")
     else:
         print("La opción no es válida")
+        sleep(1)
