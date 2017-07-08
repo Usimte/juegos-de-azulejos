@@ -121,12 +121,14 @@ def eliminar(coordenadaX, coordenadaY, item=None):
     seleccion = tablero[coordenadaY][coordenadaX]
     if item is None:
         tablero[coordenadaY][coordenadaX] = ' '
+    elif item == ' ':
+        return None
     elif item == seleccion:
         tablero[coordenadaY][coordenadaX] = ' '
     else:
         return None
     if coordenadaY > 0:
-        eliminar(coordenadaX, coordenadaY-1, seleccion)
+        eliminar(coordenadaX, coordenadaY - 1, seleccion)
     if coordenadaX < tamano_tablero - 1:
         eliminar(coordenadaX + 1, coordenadaY, seleccion)
     if coordenadaY < tamano_tablero - 1:
@@ -135,18 +137,49 @@ def eliminar(coordenadaX, coordenadaY, item=None):
         eliminar(coordenadaX - 1, coordenadaY, seleccion)
 
 
+# Esta función busca ordenar el tablero organizando los elementos de forma
+# horizontal y vertical
+def ordenar():
+    tiene_espacios = True
+    while tiene_espacios:
+        tiene_espacios = False
+        num_fila = 0
+        for fila in tablero:
+            num_columna = 0
+            for columna in fila:
+                if columna == ' ' and tablero[num_fila - 1][
+                        num_columna] != ' ' and num_fila > 0:
+                    mover_vertical(num_columna, num_fila)
+                    tiene_espacios = True
+                num_columna += 1
+            num_fila += 1
+
+
+# Esta función desplaza verticalmente un espacio, una casilla hacia arriba
+def mover_vertical(coordenadaX, coordenadaY):
+    if coordenadaY > 0:
+        tablero[coordenadaY][coordenadaX] = tablero[
+            coordenadaY - 1][coordenadaX]
+        tablero[coordenadaY - 1][coordenadaX] = ' '
+
+
 # Esta función define el modo de juego automatico
 def modo_Automatico():
     creador_Automatico()
-    encabezado(2)
-    imprimir_tablero()
+    while not tablero_limpio():
+        sleep(1)
+        encabezado(2)
+        imprimir_tablero()
+        print(' ')
+        coordenadaX = get_numero_aleatorio(get_tamano_tablero())
+        coordenadaY = get_numero_aleatorio(get_tamano_tablero())
+        eliminar(coordenadaX, coordenadaY)
+        ordenar()
 
 
 # Esta función define el modo de juego manual
 def modo_Manual():
     creador_Manual()
-    coordenadaX = None
-    coordenadaY = None
     while not tablero_limpio():
         encabezado(2)
         imprimir_tablero()
@@ -154,6 +187,7 @@ def modo_Manual():
         coordenadaX = int(input('Ingrese la coordenada X: '))
         coordenadaY = int(input('Ingrese la coordenada Y: '))
         eliminar(coordenadaX, coordenadaY)
+        ordenar()
 
 
 # Esta función se encarga de imprimir un encabezado que cambia según la etapa
