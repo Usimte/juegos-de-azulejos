@@ -55,8 +55,40 @@ def crear_Tablero(tam=tamano_tablero):
         tablero.append(fila_nueva)
         fila_nueva = []
 
-# Esta función inicia un flujo de juego automático, el tablero se crea según un tamaño máximo posible indicado por el usuario
-def modo_Automatico():
+
+# Esta función se encarga de imprimir el trablero de una forma legible para el
+# usuario, mostrando sus indicadores de fila y columna para facilitar la
+# interacción al seleccionar una casilla
+def imprimir_tablero():
+    partial_tab = '\t'
+    for fila in range(0, get_tamano_tablero()):
+        partial_tab += str(fila) + '\t'
+    print(partial_tab)
+    print(' ')
+    partial_tab = ' '
+    num_fila = 0
+    for fila in tablero:
+        partial_tab += str(num_fila) + '\t'
+        num_fila += 1
+        for columna in fila:
+            partial_tab += str(columna) + '\t'
+        print(partial_tab)
+        partial_tab = ' '
+
+
+# Esta función retorna verdadero si el tablero está vacío, en caso contrario
+# retorna False
+def tablero_limpio():
+    for fila in tablero:
+        for columna in fila:
+            if str(columna) != ' ':
+                return False
+    return True
+
+
+# Esta función inicia un flujo de juego automático, el tablero se crea
+# según un tamaño máximo posible indicado por el usuario
+def creador_Automatico():
     tamano = 0
     seleccion_usuario = 0
     while(seleccion_usuario <= 0):
@@ -82,6 +114,51 @@ def creador_Manual():
             sleep(1)
     crear_Tablero(tamano)
 
+
+# Esta función analiza y elimina los elementos correspondientes según
+# la casilla escogida
+def eliminar(coordenadaX, coordenadaY, item=None):
+    seleccion = tablero[coordenadaY][coordenadaX]
+    if item is None:
+        tablero[coordenadaY][coordenadaX] = ' '
+    elif item == seleccion:
+        tablero[coordenadaY][coordenadaX] = ' '
+    else:
+        return None
+    if coordenadaY > 0:
+        eliminar(coordenadaX, coordenadaY-1, seleccion)
+    if coordenadaX < tamano_tablero - 1:
+        eliminar(coordenadaX + 1, coordenadaY, seleccion)
+    if coordenadaY < tamano_tablero - 1:
+        eliminar(coordenadaX, coordenadaY + 1, seleccion)
+    if coordenadaX > 0:
+        eliminar(coordenadaX - 1, coordenadaY, seleccion)
+
+
+# Esta función define el modo de juego automatico
+def modo_Automatico():
+    creador_Automatico()
+    encabezado(2)
+    imprimir_tablero()
+
+
+# Esta función define el modo de juego manual
+def modo_Manual():
+    creador_Manual()
+    coordenadaX = None
+    coordenadaY = None
+    while not tablero_limpio():
+        encabezado(2)
+        imprimir_tablero()
+        print(' ')
+        coordenadaX = int(input('Ingrese la coordenada X: '))
+        coordenadaY = int(input('Ingrese la coordenada Y: '))
+        eliminar(coordenadaX, coordenadaY)
+
+
+# Esta función se encarga de imprimir un encabezado que cambia según la etapa
+# En la que se encuentre el juego
+def encabezado(modo=0):
     if(opsystem == 'posix'):
         system('clear')
     else:
@@ -95,6 +172,8 @@ def creador_Manual():
     if(modo == 0):
         print("*     Bienvenido al juego de azulejos        *")
     elif(modo == 1):
+        print("*         Configuremos el tablero            *")
+    elif(modo == 2):
         print("*           Que empiece el juego             *")
     print("**********************************************")
 
