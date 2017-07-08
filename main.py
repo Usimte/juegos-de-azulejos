@@ -6,7 +6,7 @@ from random import randrange, random
 from os import system, name as opsystem
 from time import sleep
 
-#------------------------- Getters and setters ----------------------#
+# ------------------------- Getters and setters ----------------------#
 
 
 def get_tamano_tablero():
@@ -19,7 +19,7 @@ def set_tamano_tablero(tamano):
     tamano_tablero = tamano
 
 
-#------------------------- end Getters and setters ----------------------#
+# ------------------------- end Getters and setters ----------------------#
 
 # constantes para los modos de juego
 OPCION_MODO_INDIVIDUAL = 1
@@ -33,6 +33,7 @@ opcion_elegida_por_usuario = 4
 tamano_tablero = 0
 tablero = []
 
+
 # Esta funcion genera numeros aleatorios entero
 # @numero_maximo es el limite opciones posibles de numeros aleatorios
 # return: un numero aleatorio entre 0 y (numero_maximo - 1)
@@ -40,27 +41,27 @@ def get_numero_aleatorio(numero_maximo):
     return randrange(0, stop=numero_maximo)
 
 
-# Esta funcion se encarga de pedirle al usuario el tamano del tablero y crear un tablero cuadrado con numeros aleatorios
-# return: Un tablero de tamano NxN lleno de valores aleatorios
+# Esta funcion se encarga de pedirle al usuario el tamano del tablero y crear
+# un tablero cuadrado con numeros aleatorios return: Un tablero de tamano NxN
+# lleno de valores aleatorios
 def crear_Tablero(tam=tamano_tablero):
     global tablero
     set_tamano_tablero(tam)
     print("Creando tablero...")
     fila_nueva = []
-    for fila in range(0, tam):
+    for fila in range(0, get_tamano_tablero()):
         for columna in range(0, tam):
-            fila_nueva.append(get_numero_aleatorio(tam))
+            fila_nueva.append(get_numero_aleatorio(get_tamano_tablero()))
         tablero.append(fila_nueva)
         fila_nueva = []
-    print(tablero)
 
 # Esta función inicia un flujo de juego automático, el tablero se crea según un tamaño máximo posible indicado por el usuario
 def modo_Automatico():
     tamano = 0
     seleccion_usuario = 0
-    while( seleccion_usuario <= 0 ):
+    while(seleccion_usuario <= 0):
         encabezado(1)
-        seleccion_usuario =  int(input("Ingrese el tamaño máximo posible: "))
+        seleccion_usuario = int(input("Ingrese el tamaño máximo posible: "))
         if(seleccion_usuario <= 0):
             print('Intenta crear un tablero más grande')
             sleep(1)
@@ -68,10 +69,12 @@ def modo_Automatico():
         tamano = get_numero_aleatorio(seleccion_usuario + 1)
     crear_Tablero(tamano)
 
-# Esta función inicia un flujo manual de juego, el tablero es creado según las indicaciones del usuario
-def modo_Manual():
+
+# Esta función inicia un flujo manual de juego, el tablero es creado según
+# las indicaciones del usuario
+def creador_Manual():
     tamano = 0
-    while( tamano <= 0 ):
+    while(tamano <= 0):
         encabezado(1)
         tamano = int(input("Elija el tamano del tablero: "))
         if(tamano <= 0):
@@ -79,7 +82,6 @@ def modo_Manual():
             sleep(1)
     crear_Tablero(tamano)
 
-def encabezado(modo = 0):
     if(opsystem == 'posix'):
         system('clear')
     else:
@@ -90,16 +92,16 @@ def encabezado(modo = 0):
     print("     *   *     *   *   *     *   *   *        ")
     print("     ***** ***** ***** *     *   *   *****    ")
     print("**********************************************")
-    if( modo == 0):
+    if(modo == 0):
         print("*     Bienvenido al juego de azulejos        *")
     elif(modo == 1):
         print("*           Que empiece el juego             *")
     print("**********************************************")
 
 
-
-# Se muestra el menu mientras el usuario no elija una opcion valida
-while (opcion_elegida_por_usuario > OPCION_SALIR or opcion_elegida_por_usuario <= 0):
+# Se muestra el menu mientras el usuario no elija una opcion válida
+while (opcion_elegida_por_usuario > OPCION_SALIR or
+        opcion_elegida_por_usuario <= 0):
     encabezado()
     print("Seleccione una opcion:")
     print("1. Jugar")
